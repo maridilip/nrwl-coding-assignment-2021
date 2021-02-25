@@ -1,0 +1,34 @@
+<ul *ngIf="tickets$ | async as tickets; else loading">
+
+	<li *ngFor="let ticket of tickets">
+
+		<span (click)="selectTicket(ticket)">
+            Ticket: {{ticket.id}}, {{ticket.description}}        
+        </span>
+		<label for="status"></label>
+		<select id="status" [(ngModel)]="ticket.completed"  #selectedStatus (change)='assignStatus(selectedStatus.value, ticket.id)'>
+          <option value="">Assign status</option>    
+            <option  [value]="true">
+              mark as completed
+            </option>
+            <option  [value]="false">
+              mark as not completed
+            </option>
+    </select>
+		<ng-container *ngIf="users$ | async as users">
+			<label for="assignee"></label>
+			<select id="assignee" [(ngModel)]="ticket.assigneeId" #selectedUser (change)='assignUser(selectedUser.value, ticket.id)'>
+          <option value="">Assign to user</option>    
+            <option *ngFor="let user of users" [value]="user.id">
+              {{user.name}}
+            </option>
+          </select>
+		</ng-container>
+	</li>
+</ul>
+<ng-template #loading>loading...</ng-template>
+<button (click)="showForm()">Create Ticket</button>
+<form [formGroup]="ticketForm" (ngSubmit)="onSubmit()" *ngIf="toggleForm">
+	<input formControlName="desc" placeholder="Ticket description">
+	<button type="submit" [disabled]="!ticketForm.valid">Add Ticket</button>
+</form>

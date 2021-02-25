@@ -1,0 +1,6 @@
+<ul *ngIf="selectedTicket; else loading">
+	<li><b>{{selectedTicket.description}}</b></li>
+	<li><b>Ticket status: </b>{{selectedTicket.completed? 'done' : 'incomplete'}}</li>
+	<li *ngIf="assignedUser"><b>Assigned User: </b>{{assignedUser.name}} </li>
+</ul>
+<ng-template #loading>loading...</ng-template>
